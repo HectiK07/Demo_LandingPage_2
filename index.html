@@ -13,11 +13,6 @@
             <div class="nav-logo">
                 <span class="logo-text">GIFTORA</span>
             </div>
-            <button class="mobile-menu-toggle" aria-label="Toggle menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
             <ul class="nav-menu">
                 <li><a href="#home">Home</a></li>
                 <li><a href="#collections">Collections</a></li>
@@ -34,6 +29,11 @@
                     </svg>
                 </button>
                 <button class="btn-primary nav-cta">Shop Gifts</button>
+                <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
         </div>
     </nav>
@@ -235,6 +235,82 @@
         </div>
     </section>
 
+    <!-- 8. PRODUCT DETAIL MODAL -->
+    <div class="product-modal" id="productModal">
+        <div class="product-modal-overlay" id="productModalOverlay"></div>
+        <div class="product-modal-content">
+            <button class="modal-close" id="productModalClose">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            
+            <div class="product-modal-grid">
+                <div class="product-modal-image">
+                    <img id="modalProductImage" src="" alt="Product" class="modal-image">
+                    <div class="image-zoom-hint">Click to zoom</div>
+                </div>
+                
+                <div class="product-modal-details">
+                    <h1 id="modalProductName" class="modal-product-name"></h1>
+                    
+                    <div class="modal-rating">
+                        <span class="stars">★★★★★</span>
+                        <span class="rating-count">(324 reviews)</span>
+                    </div>
+                    
+                    <div class="modal-price-section">
+                        <span class="modal-price" id="modalProductPrice"></span>
+                        <span class="modal-original-price" id="modalOriginalPrice"></span>
+                    </div>
+                    
+                    <div class="modal-description">
+                        <h3>Product Details</h3>
+                        <p id="modalProductDescription"></p>
+                    </div>
+                    
+                    <div class="modal-features">
+                        <h3>What's Included</h3>
+                        <ul id="modalProductFeatures">
+                        </ul>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <div class="quantity-selector">
+                            <button id="decreaseQty" class="qty-btn">−</button>
+                            <input type="number" id="productQty" class="qty-input" value="1" min="1">
+                            <button id="increaseQty" class="qty-btn">+</button>
+                        </div>
+                        <button class="btn-add-to-cart-modal" id="addToCartModal">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="9" cy="21" r="1"></circle>
+                                <circle cx="20" cy="21" r="1"></circle>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                            </svg>
+                            Add to Cart
+                        </button>
+                    </div>
+                    
+                    <div class="modal-shipping">
+                        <div class="shipping-item">
+                            <span class="shipping-icon">🚚</span>
+                            <span>Free shipping on orders over $100</span>
+                        </div>
+                        <div class="shipping-item">
+                            <span class="shipping-icon">✨</span>
+                            <span>Premium gift wrapping included</span>
+                        </div>
+                        <div class="shipping-item">
+                            <span class="shipping-icon">⏱️</span>
+                            <span>Same-day dispatch available</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- 8. TESTIMONIALS -->
     <section class="testimonials-section">
         <div class="section-container">
@@ -340,6 +416,31 @@
             <p>&copy; 2024 GIFTORA. All rights reserved.</p>
         </div>
     </footer>
+
+    <!-- CART MODAL -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-modal-overlay" id="cartOverlay"></div>
+        <div class="cart-modal-content">
+            <button class="cart-modal-close" aria-label="Close cart">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <div class="cart-empty">
+                <div class="cart-empty-icon">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                </div>
+                <h2>Your Cart is Empty</h2>
+                <p>Explore our beautiful gift collections and add items to your cart.</p>
+                <button class="btn-primary" id="continueShoppingBtn">Continue Shopping</button>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
