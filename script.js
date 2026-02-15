@@ -16,6 +16,8 @@ document.addEventListener('DOMContentLoaded', function() {
     initProductClickHandlers();
     initCollectionFilters();
     initNewsletterForm();
+    initButtonActions();
+    initBackToTop();
 });
 
 /* ============================================
@@ -389,6 +391,55 @@ function initNewsletterForm() {
         input.value = '';
     });
 }
+
+function initButtonActions() {
+    const shopNow = document.getElementById('heroCtaBtn');
+    const exploreBtn = document.getElementById('exploreCollectionsBtn');
+    const customGiftBtn = document.getElementById('customGiftBtn');
+    const corporateCtaBtn = document.getElementById('corporateCtaBtn');
+
+    shopNow?.addEventListener('click', (e) => {
+        e.preventDefault();
+        const collectionsSection = document.getElementById('collections');
+        collectionsSection?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    exploreBtn?.addEventListener('click', () => handleCTA('explore'));
+    customGiftBtn?.addEventListener('click', () => handleCTA('custom'));
+
+    corporateCtaBtn?.addEventListener('click', () => {
+        const newsletter = document.getElementById('newsletter');
+        newsletter?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        showToast('Our gifting team will contact you soon. Subscribe to updates!');
+    });
+}
+
+function initBackToTop() {
+    const btn = document.getElementById('backToTopBtn');
+    if (!btn) return;
+
+    const show = () => {
+        btn.style.opacity = '1';
+        btn.style.pointerEvents = 'auto';
+        btn.style.transform = 'translateY(0)';
+    };
+    const hide = () => {
+        btn.style.opacity = '0';
+        btn.style.pointerEvents = 'none';
+        btn.style.transform = 'translateY(20px)';
+    };
+
+    window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) show();
+        else hide();
+    });
+
+    btn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    hide();
+}
 /* ============================================
    TESTIMONIALS SLIDER
    Horizontal slider with dots, arrows, and touch support
@@ -677,6 +728,7 @@ function initCartModal() {
     const cartOverlay = document.getElementById('cartOverlay');
     const cartModalClose = document.querySelector('.cart-modal-close');
     const continueShoppingBtn = document.getElementById('continueShoppingBtn');
+    const continueShopping2Btn = document.getElementById('continueShopping2Btn');
 
     if (!cartIcon || !cartModal) return;
 
@@ -700,6 +752,11 @@ function initCartModal() {
 
     // Close cart modal and scroll to top when continue shopping is clicked
     continueShoppingBtn?.addEventListener('click', () => {
+        cartModal.classList.remove('active');
+        document.body.style.overflow = '';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    continueShopping2Btn?.addEventListener('click', () => {
         cartModal.classList.remove('active');
         document.body.style.overflow = '';
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -997,15 +1054,31 @@ function handleCTA(action) {
         case 'custom':
             // Navigate to custom gift builder (placeholder)
             console.log('Opening custom gift builder...');
-            alert('🎁 Custom Gift Builder Feature - Coming Soon!\nCreate your unique gift package.');
+            showToast('Custom Gift Builder coming soon!');
             break;
         case 'voucher':
             // Navigate to vouchers section (placeholder)
             console.log('Opening gift vouchers...');
-            alert('🎉 Gift Vouchers Available!\nPerfect for any occasion.');
+            showToast('Gift Vouchers available soon!');
             break;
         default:
             console.log('CTA action:', action);
     }
+}
+
+function showToast(text) {
+    const container = document.getElementById('toastContainer');
+    if (!container) return alert(text);
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = text;
+    container.appendChild(toast);
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 10);
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
 }
 

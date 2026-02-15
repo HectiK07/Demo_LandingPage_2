@@ -736,6 +736,35 @@ body {
     background: var(--white);
 }
 
+/* Toasts */
+.toast-container {
+    position: fixed;
+    bottom: 1.25rem;
+    right: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    z-index: 3000;
+    pointer-events: none;
+}
+
+.toast {
+    background: var(--text-dark);
+    color: var(--white);
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    box-shadow: var(--shadow-md);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    pointer-events: all;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 /* Newsletter */
 .newsletter-section {
     padding: 6rem 0;
@@ -1102,6 +1131,31 @@ html {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+/* Back to top */
+.back-to-top {
+    position: fixed;
+    bottom: 1.25rem;
+    right: 1.25rem;
+    background: var(--white);
+    border: 2px solid var(--text-dark);
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.back-to-top:hover {
+    background: var(--text-dark);
+    color: var(--white);
+    transform: translateY(0) scale(1.05);
 }
 
 /* Product Modal */
