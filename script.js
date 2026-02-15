@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', function() {
     initCartModal();
     initProductModal();
     initProductClickHandlers();
+    initCollectionFilters();
+    initNewsletterForm();
 });
 
 /* ============================================
@@ -340,6 +342,53 @@ function initBestSellersSlider() {
     }
 }
 
+function initCollectionFilters() {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('.collection-card');
+    if (!filterButtons.length || !cards.length) return;
+
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const filter = btn.getAttribute('data-filter');
+
+            cards.forEach(card => {
+                const type = card.getAttribute('data-collection');
+                if (filter === 'all' || filter === type) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        });
+    });
+}
+
+function initNewsletterForm() {
+    const form = document.getElementById('newsletterForm');
+    const input = document.getElementById('newsletterEmail');
+    const message = document.getElementById('newsletterMessage');
+    if (!form || !input || !message) return;
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = input.value.trim();
+        const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+        if (!isValid) {
+            message.textContent = 'Please enter a valid email address.';
+            message.classList.remove('success');
+            message.classList.add('error');
+            return;
+        }
+
+        message.textContent = 'Subscribed! Check your inbox for confirmation.';
+        message.classList.remove('error');
+        message.classList.add('success');
+        input.value = '';
+    });
+}
 /* ============================================
    TESTIMONIALS SLIDER
    Horizontal slider with dots, arrows, and touch support
@@ -960,205 +1009,3 @@ function handleCTA(action) {
     }
 }
 
-/* ============================================
-   PRODUCT MODAL & DETAILED VIEW
-   ============================================ */
-
-// Product database with details
-const productDatabase = {
-    'Luxury Love Box': {
-        price: '$89',
-        originalPrice: '$120',
-        description: 'An exquisite collection of artisanal treats, carefully curated to express your deepest emotions. Each item is hand-selected from premium suppliers, combining taste and elegance.',
-        features: [
-            'Artisanal chocolates from Belgium',
-            'Rose petal tea blend',
-            'Luxury candle (200g)',
-            'Premium greeting card',
-            'Silk ribbon gift wrap',
-            '100% satisfaction guaranteed'
-        ]
-    },
-    'Romance Celebration': {
-        price: '$95',
-        originalPrice: '$135',
-        description: 'Perfect for special moments and romantic occasions. This premium gift box contains a selection of luxurious items designed to create lasting memories with your loved one.',
-        features: [
-            'Gourmet truffles collection',
-            'Luxury bath salts',
-            'Premium scented soap',
-            'Gift-wrapped perfume sample',
-            'Handwritten note card',
-            'Free personalization'
-        ]
-    },
-    'Wellness Bundle': {
-        price: '$95',
-        originalPrice: '$140',
-        description: 'A thoughtfully curated selection of wellness products to help your recipient relax and rejuvenate. Crafted with natural, premium ingredients for the ultimate self-care experience.',
-        features: [
-            'Organic lavender spa set',
-            'Natural skincare cream',
-            'Aromatherapy diffuser',
-            'Premium herbal tea selection',
-            'Bamboo bath accessories',
-            'Luxury packaging included'
-        ]
-    },
-    'Artisan Delight Set': {
-        price: '$110',
-        originalPrice: '$160',
-        description: 'A masterpiece collection showcasing the finest artisanal products from around the world. Each item tells a story of craftsmanship and dedication to quality.',
-        features: [
-            'Handcrafted artisan soaps',
-            'Gourmet food selection',
-            'Premium honey jar (500g)',
-            'Luxury chocolate bonbons',
-            'Craft coffee beans',
-            'Wooden serving board'
-        ]
-    },
-    'Chocolate Indulgence': {
-        price: '$65',
-        originalPrice: '$95',
-        description: 'A chocolate lover\'s dream! This delightful collection features premium chocolates from master chocolatiers, each piece a work of art.',
-        features: [
-            'Premium Belgian chocolates',
-            'Dark chocolate truffles',
-            'Milk chocolate assortment',
-            'Chocolate-dipped fruits',
-            'Cocoa-dusted bonbons',
-            'Elegant gift box packaging'
-        ]
-    }
-};
-
-let currentProduct = null;
-
-// Initialize product modal
-function initProductModal() {
-    const productModal = document.getElementById('productModal');
-    const productModalOverlay = document.getElementById('productModalOverlay');
-    const productModalClose = document.getElementById('productModalClose');
-    const decreaseQtyBtn = document.getElementById('decreaseQty');
-    const increaseQtyBtn = document.getElementById('increaseQty');
-    const qtyInput = document.getElementById('productQty');
-    const addToCartBtn = document.getElementById('addToCartModal');
-
-    // Close modal on overlay click
-    productModalOverlay?.addEventListener('click', () => {
-        productModal.classList.remove('active');
-        document.body.style.overflow = '';
-    });
-
-    // Close modal on close button click
-    productModalClose?.addEventListener('click', () => {
-        productModal.classList.remove('active');
-        document.body.style.overflow = '';
-    });
-
-    // Close modal on Escape key
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && productModal.classList.contains('active')) {
-            productModal.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-    });
-
-    // Quantity controls
-    decreaseQtyBtn?.addEventListener('click', () => {
-        const currentQty = parseInt(qtyInput.value);
-        if (currentQty > 1) {
-            qtyInput.value = currentQty - 1;
-        }
-    });
-
-    increaseQtyBtn?.addEventListener('click', () => {
-        const currentQty = parseInt(qtyInput.value);
-        qtyInput.value = currentQty + 1;
-    });
-
-    qtyInput?.addEventListener('change', (e) => {
-        if (e.target.value < 1) {
-            e.target.value = 1;
-        }
-    });
-
-    // Add to cart button
-    addToCartBtn?.addEventListener('click', () => {
-        const quantity = parseInt(qtyInput.value);
-        const price = currentProduct.price.replace('$', '');
-        const total = (parseFloat(price) * quantity).toFixed(2);
-        
-        alert(`✅ Added to Cart!\n\nProduct: ${currentProduct.name}\nQuantity: ${quantity}\nTotal: $${total}\n\nYour item is now in the cart!`);
-        
-        // Reset quantity
-        qtyInput.value = 1;
-    });
-}
-
-// Open product modal
-function openProductModal(productName, imageSrc) {
-    const productData = productDatabase[productName];
-    if (!productData) return;
-
-    currentProduct = {
-        name: productName,
-        ...productData
-    };
-
-    const productModal = document.getElementById('productModal');
-    document.getElementById('modalProductImage').src = imageSrc;
-    document.getElementById('modalProductName').textContent = productName;
-    document.getElementById('modalProductPrice').textContent = productData.price;
-    document.getElementById('modalOriginalPrice').textContent = productData.originalPrice;
-    document.getElementById('modalProductDescription').textContent = productData.description;
-    
-    // Populate features
-    const featuresList = document.getElementById('modalProductFeatures');
-    featuresList.innerHTML = productData.features.map(feature => `<li>${feature}</li>`).join('');
-
-    // Reset quantity
-    document.getElementById('productQty').value = 1;
-
-    // Show modal
-    productModal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-// Attach click handlers to all product cards
-function initProductClickHandlers() {
-    // Handle product cards (best sellers section)
-    document.querySelectorAll('.product-card').forEach(card => {
-        card.style.cursor = 'pointer';
-        card.addEventListener('click', (e) => {
-            // Don't trigger if clicking on buttons (add to cart, slider arrows)
-            if (e.target.closest('.btn-add-cart') || e.target.closest('.slider-arrow')) {
-                return;
-            }
-            const productName = card.querySelector('.product-name').textContent;
-            const productImage = card.querySelector('.product-card-image').src;
-            openProductModal(productName, productImage);
-        });
-    });
-
-    // Handle collection cards (featured collections section)
-    document.querySelectorAll('.collection-card').forEach(card => {
-        card.style.cursor = 'pointer';
-        card.addEventListener('click', (e) => {
-            if (e.target.closest('.slider-arrow')) {
-                return;
-            }
-            const collectionName = card.querySelector('.collection-content h3').textContent;
-            const collectionImage = card.querySelector('.collection-image').src;
-            openProductModal(collectionName, collectionImage);
-        });
-    });
-
-    // Prevent event bubbling on buttons
-    document.querySelectorAll('.btn-add-cart').forEach(button => {
-        button.addEventListener('click', (e) => {
-            e.stopPropagation();
-        });
-    });
-}
